@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Fiori Catalog Creation – Interview Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f7f9fc;
+  color: #0f172a;
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg:        #f7f9fc;
+  --surface:   #ffffff;
+  --surface2:  #f8fafc;
+  --border:    #d1d5db;
+  --border2:   #e2e8f0;
+  --text:      #0f172a;
+  --muted:     #475569;
+  --dim:       #64748b;
+  --blue:      #2563eb;
+  --blue-soft: #e0e7ff;
+  --green:     #16a34a;
+  --green-soft:#d1fae5;
+  --amber:     #d97706;
+  --amber-soft:#fef3c7;
+  --purple:    #7c3aed;
+  --cyan:      #0ea5e9;
+  --red:       #dc2626;
+  --pink:      #d946ef;
+  --r: 10px;
+  --rs: 6px;
+}
+
+/* ===== HEADER ===== */
+.header {
+  position: relative;
+  padding: 40px 20px 32px;
+  text-align: center;
+  background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 60%, rgba(37,99,235,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 40%, rgba(124,58,237,.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(59,130,246,.35);
+  background: rgba(59,130,246,.08);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 4px 14px 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+.header-pill::before { content: ''; width: 6px; height: 6px; background: var(--blue); border-radius: 50%; }
+.header h1 {
+  font-size: clamp(24px, 6vw, 40px);
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.header h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, #3b82f6, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header p {
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 480px;
+  margin: 0 auto 20px;
+}
+.header-stats {
+  display: inline-flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.stat {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.stat strong { color: var(--text); font-size: 14px; }
+
+/* ===== STICKY NAV ===== */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sticky-nav::-webkit-scrollbar { display: none; }
+
+.nav-step {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  background: transparent;
+  color: var(--dim);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.nav-step:hover { border-color: var(--blue); color: var(--blue); background: rgba(59,130,246,.1); }
+.nav-step.active { border-color: var(--blue); color: #fff; background: var(--blue); }
+
+.nav-sep { flex-shrink: 0; width: 10px; height: 1px; background: var(--border); }
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 28px 16px 80px;
+}
+
+/* ===== QUICK REF CARD ===== */
+.qref {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.qref-header {
+  padding: 12px 18px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-family: 'IBM Plex Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.qref-item {
+  padding: 9px 18px;
+  border-bottom: 1px solid rgba(33,41,61,.7);
+  border-right: 1px solid rgba(33,41,61,.7);
+  font-size: 12px;
+}
+.qref-item:nth-child(even) { border-right: none; }
+.qref-item:nth-last-child(-n+2) { border-bottom: none; }
+.qi-label { color: var(--muted); margin-bottom: 2px; }
+.qi-value {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--cyan);
+  font-size: 12px;
+  word-break: break-all;
+}
+@media(max-width: 500px) {
+  .qref-grid { grid-template-columns: 1fr; }
+  .qref-item { border-right: none; }
+  .qref-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(33,41,61,.7); }
+  .qref-item:last-child { border-bottom: none; }
+}
+
+/* ===== INTERVIEW TIP ===== */
+.itip {
+  border: 1px solid rgba(37,99,235,.25);
+  background: #eff6ff;
+  border-radius: var(--r);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+.itip-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.itip p { font-size: 13px; color: var(--text); line-height: 1.75; }
+.itip strong { color: var(--text); font-weight: 500; }
+
+/* ===== STEP CARDS ===== */
+.step-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.step-card.open { border-color: var(--border2); }
+.step-card:hover { border-color: var(--border2); }
+
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 18px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.step-head:hover { background: rgba(15,23,42,.04); }
+
+.step-badge {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  border: 2px solid;
+  transition: all .2s;
+}
+
+.step-info { flex: 1; min-width: 0; }
+.step-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 2px;
+  opacity: .8;
+}
+.step-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.step-chevron {
+  flex-shrink: 0;
+  color: var(--dim);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .25s;
+}
+.step-card.open .step-chevron { transform: rotate(180deg); }
+.step-chevron svg { width: 16px; height: 16px; }
+
+.step-body {
+  display: none;
+  border-top: 1px solid var(--border);
+}
+.step-card.open .step-body { display: block; }
+
+/* ===== CONTENT BLOCKS ===== */
+
+/* Plain text */
+.b-text {
+  padding: 13px 18px;
+  font-size: 14px;
+  color: var(--text);
+  border-bottom: 1px solid rgba(33,41,61,.5);
+}
+.b-text:last-child { border-bottom: none; }
+
+/* T-Code block */
+.b-tcode {
+  margin: 12px 18px;
+  padding: 14px 16px;
+  background: var(--blue-soft);
+  border: 1px solid rgba(59,130,246,.25);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--rs) var(--rs) 0;
+}
+.tc-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 4px;
+}
+.tc-code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: .5px;
+}
+.tc-desc { font-size: 12px; color: var(--muted); margin-top: 5px; }
+
+/* Warning */
+.b-warn {
+  margin: 12px 18px;
+  padding: 12px 16px;
+  background: var(--amber-soft);
+  border: 1px solid rgba(245,158,11,.2);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 var(--rs) var(--rs) 0;
+  font-size: 13px;
+  color: #fcd34d;
+  line-height: 1.6;
+}
+.b-warn::before { content: '⚠️  '; }
+
+/* Tip */
+.b-tip {
+  margin: 12px 18px;
+  padding: 12px 16px;
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  border-left: 3px solid var(--green);
+  border-radius: 0 var(--rs) var(--rs) 0;
+  font-size: 13px;
+  color: #065f46;
+  line-height: 1.6;
+}
+.b-tip::before { content: '💡  '; }
+
+/* Fields table */
+.b-fields { padding: 4px 0 8px; }
+.b-field {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 8px 18px;
+  border-bottom: 1px solid rgba(33,41,61,.4);
+  font-size: 13px;
+}
+.b-field:last-child { border-bottom: none; }
+.f-key {
+  color: var(--muted);
+  font-size: 12px;
+  min-width: 150px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+.f-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--cyan);
+  word-break: break-all;
+}
+@media(max-width: 480px) {
+  .f-key { min-width: unset; width: 100%; }
+}
+
+/* Section heading inside body */
+.b-section-head {
+  padding: 14px 18px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  border-bottom: 1px solid rgba(33,41,61,.4);
+}
+
+/* Image */
+.b-img {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(33,41,61,.4);
+}
+.b-img:last-child { border-bottom: none; }
+.img-box {
+  border: 1px solid var(--border2);
+  border-radius: var(--rs);
+  overflow: hidden;
+  background: #000;
+  cursor: zoom-in;
+  transition: border-color .2s, box-shadow .2s;
+  position: relative;
+}
+.img-box:hover { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+.img-box img {
+  width: 100%;
+  display: block;
+  max-height: 360px;
+  object-fit: contain;
+  transition: opacity .2s;
+}
+.img-box img[src=""] { min-height: 100px; background: var(--surface2); }
+.img-zoom-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,.7);
+  color: rgba(255,255,255,.7);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.img-cap {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Step number badge in image context */
+.img-step-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+
+/* ===== LIGHTBOX ===== */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.88);
+  z-index: 9999;
+  padding: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.lb-close {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.lb-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(30,36,50,.85);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-size: 22px;
+  width: 42px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10000;
+  user-select: none;
+  transition: background .15s;
+}
+.lb-nav:hover { background: rgba(59,130,246,.25); }
+.lb-prev { left: 8px; border-radius: 0 6px 6px 0; }
+.lb-next { right: 8px; border-radius: 6px 0 0 6px; }
+.lb-counter {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  background: rgba(10,14,26,.8);
+  padding: 4px 12px;
+  border-radius: 20px;
+  z-index: 10000;
+}
+
+/* ===== FLOW SUMMARY ===== */
+.flow {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.flow-header {
+  padding: 12px 18px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.flow-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 16px 18px;
+  align-items: center;
+}
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin: 4px 0;
+}
+.flow-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.flow-label { font-size: 12px; color: var(--text); font-weight: 500; }
+.flow-arrow { color: var(--dim); font-size: 14px; margin: 0 6px; flex-shrink: 0; }
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--dim);
+  font-size: 11px;
+  border-top: 1px solid var(--border);
+}
+
+/* ===== SCROLL ANIMATION ===== */
+.step-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.step-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">✕</button>
+  <button class="lb-nav lb-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="Screenshot">
+  <button class="lb-nav lb-next" id="lbNext">›</button>
+  <div class="lb-counter" id="lbCounter">1 / 32</div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-pill">SAP Security &amp; GRC</div>
+  <h1>SAP <em>Fiori Catalog</em><br>Creation – Notes</h1>
+  <p>Step-by-step guide with screenshots for interview preparation</p>
+  <div class="header-stats">
+    <div class="stat"><strong>13</strong>&nbsp;Steps</div>
+    <div class="stat"><strong>32</strong>&nbsp;Screenshots</div>
+    <div class="stat"><strong>5</strong>&nbsp;T-Codes</div>
+  </div>
+</header>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav" id="stickyNav">
+  <!-- built by JS -->
+</nav>
+
+<!-- MAIN -->
+<main class="container">
+
+  <!-- QUICK REFERENCE -->
+  <div class="qref">
+    <div class="qref-header">⚡ Quick Reference</div>
+    <div class="qref-grid">
+      <div class="qref-item"><div class="qi-label">Launchpad Designer</div><div class="qi-value">/UI2/FLPD_CUST</div></div>
+      <div class="qref-item"><div class="qi-label">Transport Assign</div><div class="qi-value">/UI2/FLPCM_CUST</div></div>
+      <div class="qref-item"><div class="qi-label">Space &amp; Page Mgmt</div><div class="qi-value">/UI2/FLP</div></div>
+      <div class="qref-item"><div class="qi-label">Role Maintenance</div><div class="qi-value">PFCG</div></div>
+      <div class="qref-item"><div class="qi-label">Transport Request</div><div class="qi-value">SE10</div></div>
+      <div class="qref-item"><div class="qi-label">OData Service</div><div class="qi-value">SD_F2200_OVP_ISR_SRV</div></div>
+      <div class="qref-item"><div class="qi-label">Semantic Object</div><div class="qi-value">InternalSales</div></div>
+      <div class="qref-item"><div class="qi-label">Semantic Action</div><div class="qi-value">displayOverviewPage</div></div>
+      <div class="qref-item"><div class="qi-label">Business Catalog</div><div class="qi-value">SAP_SD_BC_SALES_OVP_DISPL</div></div>
+      <div class="qref-item"><div class="qi-label">Frontend OData Type</div><div class="qi-value">IWSG</div></div>
+      <div class="qref-item"><div class="qi-label">Backend OData Type</div><div class="qi-value">IWSV</div></div>
+      <div class="qref-item"><div class="qi-label">App Name</div><div class="qi-value">My Sales Overview</div></div>
+    </div>
+  </div>
+
+  <!-- INTERVIEW TIP -->
+  <div class="itip">
+    <div class="itip-label">🎤 Interview Answer — Use this framework</div>
+    <p>
+      <strong>"Fiori Catalog creation has three main phases:"</strong><br>
+      <strong>Phase 1 – Design:</strong> Open Launchpad Designer (<code style="font-family:monospace;color:var(--cyan)">/UI2/FLPD_CUST</code>), create a catalog, search for the SAP business catalog and drag it in as a reference — this creates the tile.<br>
+      <strong>Phase 2 – Layout:</strong> Use <code style="font-family:monospace;color:var(--cyan)">/UI2/FLP</code> to create a Space and Page so the tile appears on the Launchpad.<br>
+      <strong>Phase 3 – Authorization:</strong> In PFCG, create a role, add the Space, then add IWSG (frontend) and IWSV (backend) OData services to generate the S_SERVICE authorization objects. Save, generate, and assign to user.<br>
+      <em>Every step must be linked to a Transport Request before making changes.</em>
+    </p>
+  </div>
+
+  <!-- PROCESS FLOW -->
+  <div class="flow">
+    <div class="flow-header">📋 End-to-End Process Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="flow-num">1</div><div class="flow-label">Fiori App Library</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">2</div><div class="flow-label">Collect App Details</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">3</div><div class="flow-label">Plan IDs</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">4</div><div class="flow-label">Create Transport (SE10)</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">5</div><div class="flow-label">Create Catalog</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">6</div><div class="flow-label">Add Business Catalog</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">7</div><div class="flow-label">Target Mapping</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">8</div><div class="flow-label">Create Space &amp; Page</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">9</div><div class="flow-label">PFCG Role</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">10</div><div class="flow-label">Add OData Services</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">11</div><div class="flow-label">Generate &amp; Assign</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="flow-num">12</div><div class="flow-label">Test on Launchpad</div></div>
+    </div>
+  </div>
+
+  <!-- ===== STEP CARDS ===== -->
+  <div id="stepsWrap"></div>
+
+</main>
+
+<footer>
+  SAP Fiori Catalog Creation — Interview Notes &nbsp;·&nbsp; Tap any screenshot to enlarge &nbsp;·&nbsp; Use arrow keys to navigate images
+</footer>
+
+<script>
+/* =====================================================
+   STEP DATA — each step has: id, color, tag, icon, title, blocks[]
+   block types: text | tcode | warn | tip | field | fields | img | section
+   ===================================================== */
+const STEPS = [
+  {
+    id: 1,
+    color: '#3b82f6',
+    tag: 'Introduction',
+    icon: '🏠',
+    title: 'What is a Fiori Catalog?',
+    blocks: [
+      { type: 'text', text: 'A <strong>Fiori Catalog</strong> is a container that holds tiles (app shortcuts) on the SAP Fiori Launchpad. When a user logs in, they see tiles from catalogs that are assigned to their role. Think of it like a folder of app icons on your phone home screen.' },
+      { type: 'text', text: 'As an SAP Security consultant, you are responsible for creating these catalogs, setting up the correct OData service authorizations, and linking everything to a role in PFCG — so the right user sees the right app.' },
+      { type: 'tip', text: 'The Fiori Launchpad (FLP) is the browser-based portal for SAP apps. A <strong>Space</strong> is a tab, a <strong>Page</strong> is a section inside that tab, and a <strong>Catalog</strong> is the pool of tiles available to a role.' }
+    ]
+  },
+  {
+    id: 2,
+    color: '#06b6d4',
+    tag: 'Research',
+    icon: '🔍',
+    title: 'Find the App in Fiori App Library',
+    blocks: [
+      { type: 'text', text: 'Before creating anything in SAP, go to the <strong>SAP Fiori App Library</strong> (apps.sap.com/fiori) to find the technical details of the app you need.' },
+      { type: 'text', text: 'For our example we are setting up the <strong>My Sales Overview</strong> app. Note these details from the library:' },
+      { type: 'fields', rows: [
+        { key: 'App Name',        val: 'My Sales Overview' },
+        { key: 'OData Service',   val: 'SD_F2200_OVP_ISR_SRV' },
+        { key: 'Semantic Object', val: 'InternalSales' },
+        { key: 'Semantic Action', val: 'displayOverviewPage' },
+      ]},
+      { type: 'img', src: 'assets/img_18.png', cap: 'Screenshot 1 — SAP Fiori App Library showing My Sales Overview app details' },
+      { type: 'tip', text: 'The <strong>Semantic Object + Semantic Action</strong> pair is what gets configured in the Target Mapping. It tells the Launchpad which URL to open when a tile is clicked.' }
+    ]
+  },
+  {
+    id: 3,
+    color: '#22c55e',
+    tag: 'Planning',
+    icon: '📋',
+    title: 'Plan Your IDs — Catalog, Page & Space',
+    blocks: [
+      { type: 'text', text: 'Before opening any T-Code, plan your naming convention. All custom (Z/Y) objects need unique IDs. Here are the IDs used in this example:' },
+      { type: 'fields', rows: [
+        { key: 'Catalog ID', val: 'ZC_SAP_TC_CEC_SD_COMMON' },
+        { key: 'Page ID',    val: 'ZP_SAP_SD_PG_SALES_REP_OVR' },
+        { key: 'Space ID',   val: 'ZS_SAP_SD_SP_INTERNAL_SALES' },
+        { key: 'Title',      val: 'Sales Overview Catalog' },
+      ]},
+      { type: 'tip', text: '<strong>Z-prefix convention:</strong> Any object starting with Z or Y is a customer-created custom object. SAP standard objects never use Z/Y prefix. This separates your custom work from SAP standard content during upgrades.' }
+    ]
+  },
+  {
+    id: 4,
+    color: '#f59e0b',
+    tag: 'Transport',
+    icon: '🚚',
+    title: 'Create a Transport Request First (SE10)',
+    blocks: [
+      { type: 'text', text: 'Always create a Transport Request <em>before</em> making any Fiori customization changes. This ensures all your changes are captured and can be moved from Development → Quality → Production.' },
+      { type: 'tcode', label: 'T-Code', code: 'SE10', desc: 'Workbench Organizer — Create and manage transport requests' },
+      { type: 'warn', text: 'If you skip creating a transport request first and start making changes, you will get an error popup or the system will assign your changes to a random/wrong transport. Always do SE10 first!' },
+      { type: 'text', text: 'In SE10: Click <strong>Create</strong> → Select type <strong>"Customizing"</strong> → Enter a description like "Fiori Catalog – Sales Overview" → Save. Note down the transport request number (format: DEV#K123456).' }
+    ]
+  },
+  {
+    id: 5,
+    color: '#3b82f6',
+    tag: 'Catalog Setup',
+    icon: '🖥️',
+    title: 'Open Launchpad Designer & Create Catalog',
+    blocks: [
+      { type: 'tcode', label: 'T-Code', code: '/UI2/FLPD_CUST', desc: 'Fiori Launchpad Designer — Customizing mode (your changes go into transport)' },
+      { type: 'warn', text: 'BEFORE creating the catalog — click the Settings icon (⚙️) in the top-right of the Designer and assign your transport request. If you forget, use /UI2/FLPCM_CUST later to assign the catalog to a transport.' },
+      { type: 'img', src: 'assets/img_14.png', cap: 'Screenshot 2 — Fiori Launchpad Designer opening screen' },
+      { type: 'img', src: 'assets/img_06.png', cap: 'Screenshot 3 — Creating a new catalog in the Designer' },
+      { type: 'text', text: 'Click <strong>+</strong> to create a new catalog. Enter the Catalog ID (ZC_...) and Title. Save with the transport request you created in SE10.' }
+    ]
+  },
+  {
+    id: 6,
+    color: '#ef4444',
+    tag: 'Troubleshoot',
+    icon: '⚠️',
+    title: 'Common Issue: Transport Request Error',
+    blocks: [
+      { type: 'text', text: 'You may see this issue when opening the Launchpad Designer for the first time — it asks you to assign a transport request before letting you do anything.' },
+      { type: 'img', src: 'assets/img_32.png', cap: 'Screenshot 4 — Transport request assignment popup or error screen' },
+      { type: 'tcode', label: 'Alternative T-Code', code: '/UI2/FLPCM_CUST', desc: 'Catalog Maintenance — manually assign catalog to a transport request after creation' },
+      { type: 'text', text: 'Steps to fix: Open <strong>/UI2/FLPCM_CUST</strong> → Search for your Catalog ID → Select it → Choose "Assign to Transport Request" → Enter your SE10 transport number → Confirm.' },
+    ]
+  },
+  {
+    id: 7,
+    color: '#06b6d4',
+    tag: 'Tile Creation',
+    icon: '🔗',
+    title: 'Add SAP Business Catalog as Reference',
+    blocks: [
+      { type: 'text', text: 'Your custom catalog is empty. To add tiles, you reference the SAP-delivered <strong>Business Catalog</strong> — this pulls in the standard tiles SAP provides for that app.' },
+      { type: 'fields', rows: [
+        { key: 'Business Catalog to Search', val: 'SAP_SD_BC_SALES_OVP_DISPL' }
+      ]},
+      { type: 'img', src: 'assets/img_26.png', cap: 'Screenshot 5 — Searching for the SAP business catalog' },
+      { type: 'img', src: 'assets/img_23.png', cap: 'Screenshot 6 — Drag and drop to create a reference from business catalog to your catalog' },
+      { type: 'img', src: 'assets/img_15.png', cap: 'Screenshot 7 — Search for your custom Catalog ID to confirm the reference' },
+      { type: 'img', src: 'assets/img_07.png', cap: 'Screenshot 8 — Success! Tile is created and visible in your catalog' },
+      { type: 'tip', text: 'Creating a <strong>Reference</strong> (not a copy) means if SAP updates the standard business catalog, your catalog automatically gets those updates. Never copy tiles manually — always use reference.' }
+    ]
+  },
+  {
+    id: 8,
+    color: '#a78bfa',
+    tag: 'Target Mapping',
+    icon: '🎯',
+    title: 'Target Mapping — Make the Tile Clickable',
+    blocks: [
+      { type: 'text', text: 'The tile appears in your catalog but clicking it does nothing yet. A <strong>Target Mapping</strong> connects the tile click to the actual Fiori application URL.' },
+      { type: 'text', text: 'In the Fiori App Library, find the Target Mapping section for your app. It shows:' },
+      { type: 'fields', rows: [
+        { key: 'Semantic Object', val: 'InternalSales' },
+        { key: 'Semantic Action', val: 'displayOverviewPage' },
+        { key: 'Application Type', val: 'SAPUI5' },
+      ]},
+      { type: 'img', src: 'assets/img_01.png', cap: 'Screenshot 9 — Target Mapping section in the Fiori App Library' },
+      { type: 'tip', text: 'Think of Target Mapping like a hyperlink configuration. The Semantic Object = the website domain, Semantic Action = the page path. Together they form the navigation intent.' }
+    ]
+  },
+  {
+    id: 9,
+    color: '#22c55e',
+    tag: 'Transport',
+    icon: '🚀',
+    title: 'Assign Catalog to Transport (/UI2/FLPCM_CUST)',
+    blocks: [
+      { type: 'tcode', label: 'T-Code', code: '/UI2/FLPCM_CUST', desc: 'Fiori Catalog Maintenance — view and assign catalogs to transport requests' },
+      { type: 'text', text: 'If you could not assign the transport in the Designer, do it here. Steps:' },
+      { type: 'text', text: '1. Open <strong>/UI2/FLPCM_CUST</strong><br>2. In the search box, type <strong>"Internal Sales"</strong> (or your catalog name)<br>3. Select your catalog from results<br>4. Click the dropdown and choose <strong>"Create Reference"</strong><br>5. Search for your Catalog ID again to confirm' },
+      { type: 'img', src: 'assets/img_27.png', cap: 'Screenshot 10 — Catalog Maintenance screen' },
+      { type: 'img', src: 'assets/img_19.png', cap: 'Screenshot 11 — Search results showing your catalog' },
+      { type: 'img', src: 'assets/img_11.png', cap: 'Screenshot 12 — Select the catalog and see available options' },
+      { type: 'img', src: 'assets/img_08.png', cap: 'Screenshot 13 — Create Reference option visible in dropdown' },
+      { type: 'img', src: 'assets/img_02.png', cap: 'Screenshot 14 — Catalog assigned to transport successfully' },
+    ]
+  },
+  {
+    id: 10,
+    color: '#f59e0b',
+    tag: 'Space & Page',
+    icon: '📐',
+    title: 'Create Space & Page (/UI2/FLP)',
+    blocks: [
+      { type: 'tcode', label: 'T-Code', code: '/UI2/FLP', desc: 'Fiori Launchpad — Manage Spaces and Pages' },
+      { type: 'text', text: 'Click <strong>"Manage Launchpad Spaces"</strong>. You will see two tabs:' },
+      { type: 'fields', rows: [
+        { key: 'Customer Created', val: 'Your custom spaces — this is where you work' },
+        { key: 'Predefined', val: 'SAP-delivered standard spaces — do not modify these' },
+      ]},
+      { type: 'warn', text: 'Always create your Transport Request (SE10) before creating Space/Page. The system will ask for it.' },
+      { type: 'img', src: 'assets/img_24.png', cap: 'Screenshot 15 — Opening T-Code /UI2/FLP, Manage Launchpad Spaces' },
+      { type: 'img', src: 'assets/img_12.png', cap: 'Screenshot 16 — Customer Created tab selected' },
+      { type: 'img', src: 'assets/img_04.png', cap: 'Screenshot 17 — Clicking Create to make a new Space' },
+      { type: 'img', src: 'assets/img_28.png', cap: 'Screenshot 18 — Space creation form — enter Space ID and Title' },
+      { type: 'img', src: 'assets/img_20.png', cap: 'Screenshot 19 — Page created. Notice it shows no role assigned yet — that comes in PFCG' },
+      { type: 'tip', text: 'A <strong>Space</strong> = a tab on the Launchpad (like "Sales" or "HR"). A <strong>Page</strong> = a content area inside that tab. You link your Catalog to a Page so the tiles show up.' }
+    ]
+  },
+  {
+    id: 11,
+    color: '#ef4444',
+    tag: 'Role Setup',
+    icon: '🔐',
+    title: 'Create Role in PFCG & Add Space',
+    blocks: [
+      { type: 'tcode', label: 'T-Code', code: 'PFCG', desc: 'Profile Generator — Create, maintain, and generate SAP roles' },
+      { type: 'text', text: 'Create a new <strong>Single Role</strong>. Go to the <strong>Fiori tab</strong> → Add your Space (ZS_SAP_SD_SP_INTERNAL_SALES). Then:' },
+      { type: 'warn', text: 'CRITICAL: Before adding the Space, UNCHECK the "All Applications" checkbox. If you leave it checked, every single Fiori app installed in the system will be visible to the user — a major security risk!' },
+      { type: 'img', src: 'assets/img_16.png', cap: 'Screenshot 20 — PFCG role maintenance screen' },
+      { type: 'img', src: 'assets/img_09.png', cap: 'Screenshot 21 — Uncheck "All Applications" — this is a critical security step' },
+      { type: 'img', src: 'assets/img_03.png', cap: 'Screenshot 22 — Adding the Space to the role (after unchecking All Applications)' },
+      { type: 'tip', text: 'In an interview: <em>"I always uncheck All Applications before adding the Space because leaving it checked violates least-privilege — users would see all apps regardless of their role."</em>' }
+    ]
+  },
+  {
+    id: 12,
+    color: '#a78bfa',
+    tag: 'Authorizations',
+    icon: '⚙️',
+    title: 'Add OData Services to Role (IWSG & IWSV)',
+    blocks: [
+      { type: 'text', text: 'Every Fiori app runs on OData services. For the app to work, two types of OData services must be registered in the role — one for the Frontend server, one for the Backend server.' },
+      { type: 'fields', rows: [
+        { key: 'IWSG — Frontend OData', val: 'Registers service on the Gateway (frontend) server. Generates S_SERVICE auth object for app startup.' },
+        { key: 'IWSV — Backend OData',  val: 'Registers service on the Backend (ECC/S4HANA) server. Pulls all business authorization objects from SU24.' },
+      ]},
+      { type: 'text', text: 'In PFCG → <strong>Authorization Default</strong> tab → Add IWSG service first, then IWSV service.' },
+      { type: 'img', src: 'assets/img_29.png', cap: 'Screenshot 23 — Authorization Default tab in PFCG' },
+      { type: 'img', src: 'assets/img_21.png', cap: 'Screenshot 24 — Adding IWSG (Frontend OData service)' },
+      { type: 'img', src: 'assets/img_13.png', cap: 'Screenshot 25 — S_SERVICE authorization objects auto-generated after adding IWSG' },
+      { type: 'img', src: 'assets/img_30.png', cap: 'Screenshot 26 — Authorization objects pulled from SU24 after IWSG added' },
+      { type: 'img', src: 'assets/img_25.png', cap: 'Screenshot 27 — Adding IWSV (Backend OData service)' },
+      { type: 'img', src: 'assets/img_17.png', cap: 'Screenshot 28 — All backend authorization objects now visible, pulled from SU24' },
+      { type: 'tip', text: '<strong>Why S_SERVICE?</strong> This authorization object controls whether the user can "start" (execute) a Fiori app. Without it, clicking the tile shows an authorization error even if all other auth objects are correct.' },
+      { type: 'tip', text: '<strong>SU24 connection:</strong> When you add IWSV, SAP reads the SU24 table (auth object proposals for transactions/services) and automatically adds all required authorization objects to the role. This saves you from manually finding each auth object.' }
+    ]
+  },
+  {
+    id: 13,
+    color: '#22c55e',
+    tag: 'Final Steps',
+    icon: '✅',
+    title: 'Save, Generate, Assign & Verify',
+    blocks: [
+      { type: 'text', text: 'After adding all OData services, complete these final steps:' },
+      { type: 'fields', rows: [
+        { key: 'Step 1 — Save',     val: 'Save the role in PFCG' },
+        { key: 'Step 2 — Generate', val: 'Click Generate (F5) to create the authorization profile. Without generating, auth objects are not active.' },
+        { key: 'Step 3 — Assign',   val: 'Go to User tab → enter username → Assign role → Save. Or use mass assignment via SU10.' },
+        { key: 'Step 4 — Basis Roles', val: 'Also assign basic Fiori infrastructure roles (e.g. SAP_FLP_USER) so the user can open the Launchpad itself.' },
+      ]},
+      { type: 'img', src: 'assets/img_10.png', cap: 'Screenshot 29 — Basic Fiori roles required for every Fiori user' },
+      { type: 'section', text: 'Verify on Launchpad' },
+      { type: 'text', text: 'Log out and log back in with the assigned user. Open Fiori Launchpad. Then:' },
+      { type: 'fields', rows: [
+        { key: 'Step 1', val: 'Click Edit icon on the Launchpad' },
+        { key: 'Step 2', val: 'Add a Section and name it (e.g. "Sales Apps")' },
+        { key: 'Step 3', val: 'Go to Settings → check the checkbox to show your Page' },
+        { key: 'Step 4', val: 'Log out and log in again — tile must be visible and clickable' },
+      ]},
+      { type: 'img', src: 'assets/img_05.png', cap: 'Screenshot 30 — Launchpad showing assigned space/section' },
+      { type: 'img', src: 'assets/img_31.png', cap: 'Screenshot 31 — Edit icon and Section setup on Launchpad' },
+      { type: 'img', src: 'assets/img_22.png', cap: 'Screenshot 32 — Settings checkbox to enable Page visibility' },
+      { type: 'tip', text: 'If the tile is visible but clicking shows an error, run <strong>SU53</strong> (Authorization Check) to see which auth object is missing. Alternatively use ST01 (Authorization Trace) with the user to capture the exact missing object.' }
+    ]
+  }
+];
+
+/* =====================================================
+   LIGHTBOX
+   ===================================================== */
+let allImages = []; // collect all img src in order
+let lbIdx = 0;
+
+function openLB(src) {
+  lbIdx = allImages.indexOf(src);
+  if (lbIdx < 0) lbIdx = 0;
+  renderLB();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function renderLB() {
+  document.getElementById('lbImg').src = allImages[lbIdx];
+  document.getElementById('lbCounter').textContent = (lbIdx + 1) + ' / ' + allImages.length;
+}
+document.getElementById('lbClose').onclick = closeLB;
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLB();
+});
+document.getElementById('lbPrev').onclick = function(e) {
+  e.stopPropagation();
+  lbIdx = (lbIdx - 1 + allImages.length) % allImages.length;
+  renderLB();
+};
+document.getElementById('lbNext').onclick = function(e) {
+  e.stopPropagation();
+  lbIdx = (lbIdx + 1) % allImages.length;
+  renderLB();
+};
+document.addEventListener('keydown', function(e) {
+  var lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowLeft') { lbIdx = (lbIdx - 1 + allImages.length) % allImages.length; renderLB(); }
+  if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % allImages.length; renderLB(); }
+});
+
+/* =====================================================
+   BUILD BLOCKS
+   ===================================================== */
+function buildBlock(block) {
+  var el;
+  switch (block.type) {
+    case 'text':
+      el = document.createElement('div');
+      el.className = 'b-text';
+      el.innerHTML = block.text;
+      return el;
+
+    case 'tcode':
+      el = document.createElement('div');
+      el.className = 'b-tcode';
+      el.innerHTML = '<div class="tc-label">' + block.label + '</div>'
+        + '<div class="tc-code">' + block.code + '</div>'
+        + '<div class="tc-desc">' + block.desc + '</div>';
+      return el;
+
+    case 'warn':
+      el = document.createElement('div');
+      el.className = 'b-warn';
+      el.innerHTML = block.text;
+      return el;
+
+    case 'tip':
+      el = document.createElement('div');
+      el.className = 'b-tip';
+      el.innerHTML = block.text;
+      return el;
+
+    case 'section':
+      el = document.createElement('div');
+      el.className = 'b-section-head';
+      el.textContent = block.text;
+      return el;
+
+    case 'fields':
+      var wrap = document.createElement('div');
+      wrap.className = 'b-fields';
+      block.rows.forEach(function(row) {
+        var d = document.createElement('div');
+        d.className = 'b-field';
+        d.innerHTML = '<div class="f-key">' + row.key + '</div><div class="f-val">' + row.val + '</div>';
+        wrap.appendChild(d);
+      });
+      return wrap;
+
+    case 'img':
+      // register for lightbox
+      allImages.push(block.src);
+      var imgWrap = document.createElement('div');
+      imgWrap.className = 'b-img';
+      var box = document.createElement('div');
+      box.className = 'img-box';
+      box.setAttribute('data-src', block.src);
+      var img = document.createElement('img');
+      img.alt = block.cap || 'Screenshot';
+      img.loading = 'lazy';
+      img.src = block.src;
+      var hint = document.createElement('div');
+      hint.className = 'img-zoom-hint';
+      hint.textContent = '🔍 tap to zoom';
+      box.appendChild(img);
+      box.appendChild(hint);
+      box.onclick = function() { openLB(this.getAttribute('data-src')); };
+      imgWrap.appendChild(box);
+      if (block.cap) {
+        var cap = document.createElement('div');
+        cap.className = 'img-cap';
+        cap.textContent = block.cap;
+        imgWrap.appendChild(cap);
+      }
+      return imgWrap;
+
+    default:
+      return null;
+  }
+}
+
+/* =====================================================
+   BUILD STEPS
+   ===================================================== */
+function buildSteps() {
+  var nav = document.getElementById('stickyNav');
+  var wrap = document.getElementById('stepsWrap');
+
+  STEPS.forEach(function(step, idx) {
+    // Nav dot
+    if (idx > 0) {
+      var sep = document.createElement('div');
+      sep.className = 'nav-sep';
+      nav.appendChild(sep);
+    }
+    var dot = document.createElement('div');
+    dot.className = 'nav-step';
+    dot.id = 'navdot-' + step.id;
+    dot.textContent = step.id;
+    dot.title = step.title;
+    dot.onclick = function() {
+      var card = document.getElementById('step-' + step.id);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    nav.appendChild(dot);
+
+    // Card
+    var card = document.createElement('div');
+    card.className = 'step-card';
+    card.id = 'step-' + step.id;
+
+    // Color hex with alpha for bg
+    var colorBg = step.color + '18';
+
+    // Header
+    var head = document.createElement('div');
+    head.className = 'step-head';
+    head.innerHTML =
+      '<div class="step-badge" style="border-color:' + step.color + ';color:' + step.color + ';background:' + colorBg + '">' + step.id + '</div>'
+      + '<div class="step-info">'
+      +   '<div class="step-tag" style="color:' + step.color + '">' + step.tag + '</div>'
+      +   '<div class="step-name">' + step.icon + '&nbsp; ' + step.title + '</div>'
+      + '</div>'
+      + '<div class="step-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>';
+    head.onclick = function() { card.classList.toggle('open'); };
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'step-body';
+    step.blocks.forEach(function(block) {
+      var el = buildBlock(block);
+      if (el) body.appendChild(el);
+    });
+
+    card.appendChild(head);
+    card.appendChild(body);
+    wrap.appendChild(card);
+
+    // Open first step by default
+    if (idx === 0) card.classList.add('open');
+  });
+}
+
+/* =====================================================
+   INTERSECTION OBSERVER — scroll animations + nav highlight
+   ===================================================== */
+function setupObservers() {
+  // Animate cards in
+  var animObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); animObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+
+  // Nav active highlight
+  var navObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      var id = e.target.id.replace('step-', '');
+      var dot = document.getElementById('navdot-' + id);
+      if (dot) dot.classList.toggle('active', e.isIntersecting);
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.step-card').forEach(function(c) {
+    animObs.observe(c);
+    navObs.observe(c);
+  });
+}
+
+/* ===== INIT ===== */
+buildSteps();
+setupObservers();
+</script>
+</body>
+</html>
