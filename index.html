@@ -599,7 +599,48 @@ footer {
   font-size: 11px;
   border-top: 1px solid var(--border);
 }
+.top-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px auto;
+    padding: 12px;
+}
 
+.top-links a {
+    text-decoration: none;
+    background: linear-gradient(135deg, #007bff, #0056d2);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,123,255,0.25);
+    transition: all 0.3s ease;
+}
+
+.top-links a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,123,255,0.35);
+    color: #fff;
+}
+
+.top-links a:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .top-links {
+        flex-direction: column;
+    }
+
+    .top-links a {
+        width: 90%;
+        text-align: center;
+    }
+}   
 /* ===== SCROLL ANIMATION ===== */
 .step-card {
   opacity: 0;
@@ -625,10 +666,18 @@ footer {
 
 <!-- HEADER -->
 <header class="header">
-  <div class="header-pill">
-    <a href="https://shreedharsir.netlify.app/" target="_blank">ECC Security Learning</a>
-    <span>•</span>
-    <a href="https://shreedharsir.netlify.app/fiori-learning" target="_blank">Fiori Learning</a>
+  <div class="top-links">
+    <a href="https://shreedharsir.netlify.app/" target="_blank">
+        ECC Security Learning
+    </a>
+
+    <a href="https://shreedharsir.netlify.app/fiori-learning" target="_blank">
+        Fiori Learning
+    </a>
+
+    <a href="Fiori-Interview-Questions.html" target="_blank">
+        Fiori Interview Questions
+    </a>
 </div>
   <h1>SAP <em>Fiori Catalog</em><br>Creation – Notes</h1>
   <p>Step-by-step guide with screenshots for interview preparation</p>

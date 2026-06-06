@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Fiori Security — Interview Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a56db;
+  --blue-light:#eff6ff;
+  --blue-mid:#bfdbfe;
+  --blue-dark:#1e3a5f;
+  --green:#059669;
+  --green-light:#ecfdf5;
+  --amber:#b45309;
+  --amber-light:#fffbeb;
+  --red:#dc2626;
+  --red-light:#fef2f2;
+  --purple:#6d28d9;
+  --purple-light:#f5f3ff;
+  --gray50:#f9fafb;
+  --gray100:#f3f4f6;
+  --gray200:#e5e7eb;
+  --gray300:#d1d5db;
+  --gray500:#6b7280;
+  --gray700:#374151;
+  --gray900:#111827;
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+body{font-family:'Inter',sans-serif;background:#f0f4f8;color:var(--gray900);min-height:100vh;font-size:14px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+
+/* Layout */
+.page{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+
+/* Header */
+.header{background:#1e3a5f;border-radius:16px;padding:28px 28px 24px;margin-bottom:24px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04)}
+.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:.03em}
+.header h1{font-size:22px;font-weight:600;color:#fff;margin-bottom:6px;line-height:1.3}
+.header p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.5}
+.header-stats{display:flex;gap:16px;margin-top:18px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;text-align:center}
+.stat-num{font-size:18px;font-weight:600;color:#fff}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,.6);margin-top:1px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Nav tabs */
+.nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:8px 14px;border-radius:8px;border:1px solid var(--gray200);background:#fff;color:var(--gray500);cursor:pointer;transition:all .18s;white-space:nowrap;font-family:'Inter',sans-serif}
+.nav-btn svg{width:14px;height:14px;flex-shrink:0}
+.nav-btn:hover{background:var(--gray50);color:var(--gray700);border-color:var(--gray300)}
+.nav-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 2px 8px rgba(26,86,219,.3)}
+
+/* Section */
+.section{display:none}.section.active{display:block}
+.section-head{font-size:11px;font-weight:600;color:var(--gray500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;padding-left:2px}
+
+/* Q&A Cards */
+.qa-card{background:#fff;border:1px solid var(--gray200);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow);transition:border-color .15s}
+.qa-card:hover{border-color:var(--gray300)}
+.qa-card.open{border-color:var(--blue-mid)}
+.qa-q{padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
+.q-badge{flex-shrink:0;font-size:10px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:3px 8px;border-radius:20px;margin-top:2px;letter-spacing:.02em}
+.q-badge.sc{color:var(--amber);background:var(--amber-light)}
+.q-badge.adv{color:var(--purple);background:var(--purple-light)}
+.q-text{font-size:14px;font-weight:500;color:var(--gray900);flex:1;line-height:1.45}
+.q-icon{flex-shrink:0;color:var(--gray300);transition:transform .2s,color .15s;margin-top:3px}
+.qa-card.open .q-icon{transform:rotate(180deg);color:var(--blue)}
+.qa-a{display:none;padding:4px 16px 16px;background:var(--gray50);border-top:1px solid var(--gray100)}
+.qa-card.open .qa-a{display:block}
+
+/* Answer content */
+.ans-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:10px;margin-top:4px}
+.ans-tag.blue{background:var(--blue-light);color:var(--blue)}
+.ans-tag.green{background:var(--green-light);color:var(--green)}
+.ans-tag.amber{background:var(--amber-light);color:var(--amber)}
+.ans-body{font-size:13px;line-height:1.7;color:var(--gray700)}
+.ans-body p{margin-bottom:6px}
+.ans-body ul{padding-left:16px;margin:4px 0 6px}
+.ans-body li{margin-bottom:3px}
+
+/* Info boxes */
+.box{padding:10px 13px;border-radius:var(--radius-sm);margin:8px 0;font-size:13px;line-height:1.6;border-left:3px solid transparent}
+.box.info{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark)}
+.box.warn{background:var(--amber-light);border-color:#f59e0b;color:var(--amber)}
+.box.ok{background:var(--green-light);border-color:var(--green);color:#065f46}
+.box.danger{background:var(--red-light);border-color:var(--red);color:#991b1b}
+.box strong{font-weight:600}
+
+/* Checklist */
+.checklist{display:flex;flex-direction:column;gap:7px;margin:8px 0}
+.check-row{display:flex;gap:9px;align-items:flex-start}
+.check-icon{flex-shrink:0;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.check-icon.blue{background:var(--blue-light)}
+.check-icon.blue svg{color:var(--blue)}
+.check-icon.red{background:var(--red-light)}
+.check-icon.red svg{color:var(--red)}
+.check-txt{font-size:13px;color:var(--gray700);line-height:1.55}
+.check-txt strong{color:var(--gray900);font-weight:600}
+
+/* Steps */
+.steps{display:flex;flex-direction:column;gap:10px;margin:8px 0}
+.step-row{display:flex;gap:10px;align-items:flex-start}
+.step-circle{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body{font-size:13px;color:var(--gray700);line-height:1.55;flex:1}
+.step-body strong{color:var(--gray900);font-weight:600}
+.step-body code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--gray100);padding:1px 5px;border-radius:4px;color:var(--blue-dark)}
+
+/* Compare grid */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.cmp-col{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid transparent}
+.cmp-col.blue{background:var(--blue-light);border-color:var(--blue-mid)}
+.cmp-col.green{background:var(--green-light);border-color:#a7f3d0}
+.cmp-col h4{font-size:11px;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.cmp-col.blue h4{color:var(--blue)}
+.cmp-col.green h4{color:var(--green)}
+.cmp-col ul{padding-left:14px;font-size:12px;color:var(--gray700)}
+.cmp-col li{margin-bottom:3px}
+
+/* Layers */
+.layers{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.layer{padding:9px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;border:1px solid transparent}
+.layer-num{font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ly1{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}.ly1 .layer-num{background:#1e40af;color:#fff}
+.ly2{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}.ly2 .layer-num{background:#059669;color:#fff}
+.ly3{background:#fffbeb;border-color:#fcd34d;color:#78350f}.ly3 .layer-num{background:#d97706;color:#fff}
+.ly4{background:#f0fdf4;border-color:#bbf7d0;color:#14532d}.ly4 .layer-num{background:#16a34a;color:#fff}
+
+/* Tags row */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.tag{font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid transparent}
+.tag.blue{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid)}
+.tag.green{background:var(--green-light);color:var(--green);border-color:#a7f3d0}
+.tag.amber{background:var(--amber-light);color:var(--amber);border-color:#fcd34d}
+
+/* Code box */
+.code-box{background:#1e2d40;border-radius:var(--radius-sm);padding:10px 14px;margin:8px 0;font-family:'JetBrains Mono',monospace;font-size:12px;color:#93c5fd;line-height:1.7}
+.code-box span{color:#86efac}
+.code-box em{color:#fca5a5;font-style:normal}
+
+/* ---- T-CODES TAB ---- */
+.tcode-group{margin-bottom:16px}
+.tcode-group-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--gray500);margin-bottom:8px;padding:0 2px}
+.tcode-group-label::after{content:'';flex:1;height:1px;background:var(--gray200)}
+.tcode-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.tcode-card{background:#fff;border:1px solid var(--gray200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:8px;display:flex;align-items:stretch}
+.tcode-left{display:flex;align-items:center;justify-content:center;padding:12px 14px;background:#1e2d40;min-width:130px;max-width:160px}
+.tcode-left code{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;color:#93c5fd;word-break:break-all;text-align:center;line-height:1.4}
+.tcode-right{padding:10px 14px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.tcode-name{font-size:13px;font-weight:600;color:var(--gray900);margin-bottom:2px}
+.tcode-desc{font-size:12px;color:var(--gray500);line-height:1.5}
+
+/* HTTP error cards */
+.http-grid{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.http-card{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid transparent}
+.http-code{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;white-space:nowrap;margin-top:1px}
+.http-txt{font-size:12.5px;line-height:1.5}
+.http-card.err{background:var(--red-light);border-color:#fecaca}.http-card.err .http-code{color:var(--red)}
+.http-card.warn{background:var(--amber-light);border-color:#fcd34d}.http-card.warn .http-code{color:var(--amber)}
+.http-card.info{background:var(--blue-light);border-color:var(--blue-mid)}.http-card.info .http-code{color:var(--blue)}
+.http-card.purple{background:var(--purple-light);border-color:#ddd6fe}.http-card.purple .http-code{color:var(--purple)}
+
+/* Mobile responsive */
+@media(max-width:600px){
+  .page{padding:12px 12px 40px}
+  .header{padding:20px 18px 18px;border-radius:12px}
+  .header h1{font-size:18px}
+  .header-stats{gap:8px}
+  .stat{padding:6px 10px}
+  .stat-num{font-size:15px}
+  .nav-btn{font-size:12px;padding:7px 11px}
+  .cmp{grid-template-columns:1fr}
+  .tcode-left{min-width:110px}
+  .tcode-left code{font-size:10.5px}
+  .qa-q{padding:12px 13px}
+  .qa-a{padding:4px 13px 14px}
+  .q-text{font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Header -->
+<div class="header">
+  <div class="header-badge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    SAP Security Interview Prep
+  </div>
+  <h1>SAP Fiori Security — Complete Interview Guide</h1>
+  <p>Detailed Q&amp;A, T-Code reference, troubleshooting scenarios &amp; advanced topics for 3+ years experience</p>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-num">15+</div><div class="stat-lbl">Questions</div></div>
+    <div class="stat"><div class="stat-num">20+</div><div class="stat-lbl">T-Codes</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-lbl">Scenarios</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Sections</div></div>
+  </div>
+</div>
+
+<!-- Nav -->
+<div class="nav">
+  <button class="nav-btn active" onclick="switchTab(0)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    Basics
+  </button>
+  <button class="nav-btn" onclick="switchTab(1)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Security Layers
+  </button>
+  <button class="nav-btn" onclick="switchTab(2)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Tiles &amp; OData
+  </button>
+  <button class="nav-btn" onclick="switchTab(3)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+    T-Codes
+  </button>
+  <button class="nav-btn" onclick="switchTab(4)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Troubleshoot
+  </button>
+  <button class="nav-btn" onclick="switchTab(5)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Advanced
+  </button>
+</div>
+
+<!-- SECTION 0: BASICS -->
+<div id="s0" class="section active">
+<div class="section-head">Fiori Fundamentals</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q1</span>
+    <span class="q-text">What is SAP Fiori? Why was it introduced?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="box info"><strong>SAP Fiori</strong> is SAP's modern UX (User Experience) framework — role-based, responsive applications accessible from any device: desktop, tablet, or mobile.</div>
+      <p style="margin-top:8px;font-weight:600;color:var(--gray900)">Why it was introduced:</p>
+      <div class="checklist" style="margin-top:6px">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Old SAP GUI was complex, ugly, and not user-friendly at all</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Businesses needed mobile-compatible interfaces for on-the-go use</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Users wanted simple, task-based apps instead of cluttered screens</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Business required faster access to key tasks without navigating deep menus</div></div>
+      </div>
+      <div class="box ok" style="margin-top:8px">Think of Fiori like a smartphone home screen — each tile is a shortcut that opens one specific app for one specific job.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q2</span>
+    <span class="q-text">What are the main components of SAP Fiori architecture?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="layers">
+        <div class="layer ly1"><div class="layer-num">1</div>Frontend Server (FES) — Hosts Launchpad, Catalogs, Tiles, OData registration</div>
+        <div class="layer ly2"><div class="layer-num">2</div>SAP Gateway — Middle layer connecting Frontend to Backend via OData protocol</div>
+        <div class="layer ly3"><div class="layer-num">3</div>Backend Server (ECC / S/4HANA) — Business logic, authorization objects, real data</div>
+        <div class="layer ly4"><div class="layer-num">4</div>OData Services — The API channel carrying data between all layers</div>
+      </div>
+      <div class="box info" style="margin-top:8px"><strong>FLP (Fiori Launchpad)</strong> is the central homepage where users land after login. All tiles live here and every Fiori session starts here.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q3</span>
+    <span class="q-text">What is the difference between Catalog, Group, Space, and Page?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="checklist">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Catalog</strong> — Gives authorization to see tiles. Contains target mappings. Without catalog assigned in PFCG role, user cannot see or open the tile.</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Group</strong> — Older method to display tiles on launchpad home page. Controls visibility only, not authorization. Being replaced by Spaces.</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Space</strong> — New SAP recommended structure replacing Groups. Better organized, more flexible layout for S/4HANA systems.</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Page</strong> — Lives inside a Space. Contains sections where tiles are arranged and displayed to the user.</div></div>
+      </div>
+      <div class="box warn"><strong>Key rule:</strong> Catalog = Authorization to access. Space/Page = Visibility and layout only. You need BOTH for the tile to show and work correctly.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q4</span>
+    <span class="q-text">What are the different types of Fiori Apps?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="tags"><span class="tag blue">Transactional Apps</span><span class="tag green">Analytical Apps</span><span class="tag amber">Fact Sheet Apps</span></div>
+      <div class="checklist" style="margin-top:8px">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Transactional</strong> — For creating, editing, approving business records. Example: Create Purchase Order, Approve Leave Request</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Analytical</strong> — For viewing charts, dashboards, KPIs, and reports. Example: Sales Overview Dashboard, Budget Analysis</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Fact Sheet</strong> — Shows key contextual information about a business object. Example: Supplier Details, Material Info Page</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 1: SECURITY LAYERS -->
+<div id="s1" class="section">
+<div class="section-head">Security Layers &amp; Roles</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q5</span>
+    <span class="q-text">What are the major security layers in SAP Fiori?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <p style="margin-bottom:8px">Fiori security has <strong>4 distinct layers</strong> — every single layer must be correctly configured for the app to work:</p>
+      <div class="layers">
+        <div class="layer ly1"><div class="layer-num">1</div>Frontend Auth — Catalog &amp; Tile authorization on the Frontend server</div>
+        <div class="layer ly2"><div class="layer-num">2</div>OData Auth — User permission to call the specific OData service</div>
+        <div class="layer ly3"><div class="layer-num">3</div>Gateway Auth — Gateway communication and service registration allowed</div>
+        <div class="layer ly4"><div class="layer-num">4</div>Backend Auth — Authorization objects checked in the backend system</div>
+      </div>
+      <div class="box warn" style="margin-top:8px">If even ONE layer is missing or incorrect, the app will either not show, give HTTP 403, or throw a data loading error. Always check all 4 layers systematically.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q6</span>
+    <span class="q-text">What is the difference between ECC Security and Fiori Security?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="cmp">
+        <div class="cmp-col blue">
+          <h4>ECC Security</h4>
+          <ul>
+            <li>Transaction-based access</li>
+            <li>Users access via T-Codes</li>
+            <li>PFCG roles only needed</li>
+            <li>SAP GUI (desktop app)</li>
+            <li>Simpler auth model</li>
+          </ul>
+        </div>
+        <div class="cmp-col green">
+          <h4>Fiori Security</h4>
+          <ul>
+            <li>App/tile-based access</li>
+            <li>Users access via Tiles</li>
+            <li>Catalog + OData + Backend</li>
+            <li>Browser / mobile</li>
+            <li>Multi-layer auth model</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box info" style="margin-top:4px">In Fiori, just adding a T-code to a backend role is NOT enough. You also need: Catalog assignment, OData service activation, and SICF node active. Missing any one = app won't work.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q7</span>
+    <span class="q-text">What role types are required for Fiori and what goes inside each?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <p style="margin-bottom:8px">You always need <strong>two separate roles</strong> for Fiori to work correctly:</p>
+      <div class="cmp">
+        <div class="cmp-col blue">
+          <h4>Frontend Role</h4>
+          <ul>
+            <li>Business Catalog</li>
+            <li>Space / Page assignment</li>
+            <li>Target Mapping</li>
+            <li>OData service registration</li>
+            <li>Created in PFCG (FES)</li>
+          </ul>
+        </div>
+        <div class="cmp-col green">
+          <h4>Backend Role</h4>
+          <ul>
+            <li>T-Codes (transactions)</li>
+            <li>Authorization objects</li>
+            <li>OData authorization</li>
+            <li>Business data access</li>
+            <li>Created in PFCG (Backend)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box ok">Frontend role = what the user can <strong>SEE</strong> on the launchpad. Backend role = what the user can <strong>DO and ACCESS</strong> in the system.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 2: TILES & ODATA -->
+<div id="s2" class="section">
+<div class="section-head">Tiles, OData &amp; Navigation</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q8</span>
+    <span class="q-text">What is a Tile and what is Target Mapping?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="checklist">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Tile</strong> — Visual button/icon on the Fiori Launchpad. It is what the user sees and clicks to open an application. Can show live data (dynamic tiles) or be a static shortcut.</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Target Mapping</strong> — The bridge between a tile and the actual application. It defines: which Semantic Object + Action → maps to which application URL/component to open.</div></div>
+      </div>
+      <div class="box warn" style="margin-top:8px">Without a Target Mapping configured correctly, the tile will show on the launchpad but clicking it either does nothing or throws a "Cannot resolve navigation target" error.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q9</span>
+    <span class="q-text">What is a Semantic Object and Semantic Action? Give an example.</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <div class="checklist">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Semantic Object</strong> — A logical business entity name. Examples: Material, PurchaseOrder, Supplier, Invoice, SalesOrder, Employee</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt"><strong>Semantic Action</strong> — The operation to perform on that object. Examples: display, create, manage, approve, edit, post</div></div>
+      </div>
+      <div class="code-box" style="margin-top:8px">
+        <span>Semantic Object</span> = PurchaseOrder<br>
+        <span>Action</span>         = display<br>
+        <em>Intent URL</em>      = #PurchaseOrder-display<br><br>
+        <span>Full URL example:</span><br>
+        <em>#SalesOrder-display?SalesOrder=4500001234</em>
+      </div>
+      <div class="box warn">If the Semantic Object or Action in Target Mapping does not match what the tile expects, you get the "Cannot resolve navigation target" error.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q10</span>
+    <span class="q-text">What is OData? Why is it important in Fiori Security?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <p><strong>OData (Open Data Protocol)</strong> is the REST-based API/communication standard used by Fiori to exchange data between the frontend and SAP backend.</p>
+      <div class="checklist" style="margin:8px 0">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Fiori app requests data → the registered OData service is called</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">OData request passes through SAP Gateway → hits the Backend server</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Backend processes, checks auth, returns data back through OData → displayed in app</div></div>
+      </div>
+      <div class="box warn">If OData service is not activated OR user has no authorization to call it → the app will not load data, even if the tile is visible on launchpad.</div>
+      <div class="cmp" style="margin-top:8px">
+        <div class="cmp-col blue"><h4>Activate OData</h4><ul><li>/IWFND/MAINT_SERVICE</li></ul></div>
+        <div class="cmp-col green"><h4>Test OData</h4><ul><li>/IWFND/GW_CLIENT</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge">Q11</span>
+    <span class="q-text">What is SICF and why is it important for Fiori?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag blue">Answer</span>
+    <div class="ans-body">
+      <p><strong>SICF (Service Implementation using ICF)</strong> is the SAP transaction used to activate or deactivate HTTP/HTTPS services — which includes all Fiori app services.</p>
+      <div class="checklist" style="margin:8px 0">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Every Fiori app requires its SICF node to be in <strong>ACTIVE</strong> status to load in a browser</div></div>
+        <div class="check-row"><div class="check-icon red"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="check-txt">If SICF node is inactive → user gets <strong>HTTP 404</strong> or blank page when opening the app</div></div>
+      </div>
+      <div class="code-box">
+        <span>Path to activate:</span><br>
+        SICF → sap → bc → ui5_ui5 → sap → [your_app]<br>
+        Right-click → <em>Activate Service</em>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 3: T-CODES -->
+<div id="s3" class="section">
+<div class="section-head">Transaction Codes Reference</div>
+
+<div class="tcode-group">
+  <div class="tcode-group-label"><div class="tcode-dot" style="background:#1a56db"></div>Role &amp; User Management</div>
+  <div class="tcode-card"><div class="tcode-left"><code>PFCG</code></div><div class="tcode-right"><div class="tcode-name">Role Maintenance</div><div class="tcode-desc">Create, edit, generate, and assign roles to users. The most-used T-code in all of SAP Security — you'll use this every day.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SU01</code></div><div class="tcode-right"><div class="tcode-name">User Maintenance</div><div class="tcode-desc">Create or modify user accounts, lock/unlock users, reset passwords, assign roles directly to a single user.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SU10</code></div><div class="tcode-right"><div class="tcode-name">Mass User Maintenance</div><div class="tcode-desc">Assign roles, lock/unlock, or change validity for multiple users at once. Saves time for bulk operations.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SU01D</code></div><div class="tcode-right"><div class="tcode-name">User Display (Read-Only)</div><div class="tcode-desc">View user details, assigned roles, and logon data without any edit permissions. Safe to share with non-admin staff.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SU21</code></div><div class="tcode-right"><div class="tcode-name">Authorization Object Maintenance</div><div class="tcode-desc">Create and manage authorization objects and their fields. Used when creating custom authorization checks for custom apps.</div></div></div>
+</div>
+
+<div class="tcode-group">
+  <div class="tcode-group-label"><div class="tcode-dot" style="background:#059669"></div>Troubleshooting &amp; Auth Trace</div>
+  <div class="tcode-card"><div class="tcode-left"><code>SU53</code></div><div class="tcode-right"><div class="tcode-name">Authorization Error Check</div><div class="tcode-desc">Shows the last failed authorization check for any user. Always the FIRST place to check when a user reports an auth error. Run it right after the user hits the error.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>STAUTHTRACE</code></div><div class="tcode-right"><div class="tcode-name">Authorization Trace</div><div class="tcode-desc">Real-time trace of all authorization checks for a specific user. More powerful than SU53 — captures the full sequence of auth checks made when user performs an action.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>ST01</code></div><div class="tcode-right"><div class="tcode-name">System Trace</div><div class="tcode-desc">Full system-level trace including authorization, RFC calls, and more. Use when SU53 and STAUTHTRACE are not enough to pinpoint the exact issue.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SU56</code></div><div class="tcode-right"><div class="tcode-name">User Buffer Analysis</div><div class="tcode-desc">Shows all authorization objects currently in a user's buffer. Use after assigning a new role to verify the new authorization values are actually loaded.</div></div></div>
+</div>
+
+<div class="tcode-group">
+  <div class="tcode-group-label"><div class="tcode-dot" style="background:#d97706"></div>OData &amp; Gateway</div>
+  <div class="tcode-card"><div class="tcode-left"><code>/IWFND/MAINT_SERVICE</code></div><div class="tcode-right"><div class="tcode-name">OData Service Activation</div><div class="tcode-desc">Register and activate OData services on the Frontend/Gateway server. Required step every time a new Fiori app is set up. Check here first if "Failed to load metadata" appears.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/IWFND/GW_CLIENT</code></div><div class="tcode-right"><div class="tcode-name">Gateway Test Client</div><div class="tcode-desc">Built-in browser-like tool to test OData service calls directly in SAP. Use it to confirm whether a service returns data correctly, before blaming auth or the app.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/IWFND/ERROR_LOG</code></div><div class="tcode-right"><div class="tcode-name">Gateway Error Log</div><div class="tcode-desc">Error log on the Frontend/Gateway server side. Shows failed OData calls, timeouts, and service errors. Check here when the Gateway layer seems to be failing.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/IWBEP/ERROR_LOG</code></div><div class="tcode-right"><div class="tcode-name">Backend OData Error Log</div><div class="tcode-desc">Error log on the Backend server for OData model and data provider errors. Check here when the issue is on the backend side of the OData service.</div></div></div>
+</div>
+
+<div class="tcode-group">
+  <div class="tcode-group-label"><div class="tcode-dot" style="background:#d85a30"></div>Fiori Launchpad &amp; Catalog</div>
+  <div class="tcode-card"><div class="tcode-left"><code>/UI2/FLPD_CUST</code></div><div class="tcode-right"><div class="tcode-name">Launchpad Designer (Cust.)</div><div class="tcode-desc">Create and manage catalogs, groups, tiles, and target mappings in the customer namespace. Main tool for Fiori administrators to set up the launchpad.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/UI2/FLPCM_CUST</code></div><div class="tcode-right"><div class="tcode-name">Catalog Manager</div><div class="tcode-desc">Manage and assign catalogs to PFCG roles. Use this to link a catalog to a role or verify which roles have a specific catalog assigned.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/UI2/FLP</code></div><div class="tcode-right"><div class="tcode-name">Open Fiori Launchpad</div><div class="tcode-desc">Launches the Fiori Launchpad directly from SAP GUI. Useful for testing the launchpad as-is without opening a browser separately.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/UI2/INVALIDATE_CLIENT_CACHES</code></div><div class="tcode-right"><div class="tcode-name">Clear Frontend Cache</div><div class="tcode-desc">Clears cached launchpad data on the frontend server. Use this when tile or catalog changes are not visible even after role generation. Always run after making catalog changes.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>/UI2/CHIP_SYNCHRONIZE_CACHE</code></div><div class="tcode-right"><div class="tcode-name">Sync Tile/Chip Cache</div><div class="tcode-desc">Synchronizes the tile chip cache after catalog or tile configuration changes. Run alongside /UI2/INVALIDATE_CLIENT_CACHES when tiles are not updating.</div></div></div>
+</div>
+
+<div class="tcode-group">
+  <div class="tcode-group-label"><div class="tcode-dot" style="background:#6d28d9"></div>Service Activation &amp; Monitoring</div>
+  <div class="tcode-card"><div class="tcode-left"><code>SICF</code></div><div class="tcode-right"><div class="tcode-name">ICF Service Activation</div><div class="tcode-desc">Activate or deactivate HTTP services for Fiori apps. Every Fiori app node must be ACTIVE here or the app gives HTTP 404. Check here when the app doesn't load at all.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SMICM</code></div><div class="tcode-right"><div class="tcode-name">ICM Monitor</div><div class="tcode-desc">Monitor the Internet Communication Manager — checks HTTP/HTTPS connections, ports, and SSL. Use when network-level connectivity to the Fiori server seems broken.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SMGW</code></div><div class="tcode-right"><div class="tcode-name">Gateway Monitor</div><div class="tcode-desc">Monitor SAP Gateway connections, performance, and active connections between frontend and backend systems.</div></div></div>
+  <div class="tcode-card"><div class="tcode-left"><code>SM21</code></div><div class="tcode-right"><div class="tcode-name">System Log</div><div class="tcode-desc">View system-level logs including security events, runtime errors, and critical failures. Useful for HTTP 500 errors and backend crashes.</div></div></div>
+</div>
+</div>
+
+<!-- SECTION 4: TROUBLESHOOT -->
+<div id="s4" class="section">
+<div class="section-head">Real-World Troubleshooting Scenarios</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge sc">Sc1</span>
+    <span class="q-text">User can see the tile but gets an authorization error when clicking it. What will you check?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag amber">Step-by-Step Approach</span>
+    <div class="ans-body">
+      <div class="steps">
+        <div class="step-row"><div class="step-circle">1</div><div class="step-body">Run <code>SU53</code> for the affected user immediately after they hit the error — it shows the last failed authorization object and the values that were checked vs. what was allowed.</div></div>
+        <div class="step-row"><div class="step-circle">2</div><div class="step-body">Enable <code>STAUTHTRACE</code> for that specific user, ask them to click the tile again, then stop the trace and analyze all failed auth checks. More complete than SU53.</div></div>
+        <div class="step-row"><div class="step-circle">3</div><div class="step-body">Open <code>PFCG</code> → check the user's assigned backend roles → verify the missing authorization object is present with correct values (activity, org levels).</div></div>
+        <div class="step-row"><div class="step-circle">4</div><div class="step-body">Check OData service authorization — the user's backend role needs a specific auth object to call the OData service. Verify it's present.</div></div>
+        <div class="step-row"><div class="step-circle">5</div><div class="step-body">Add the missing auth object/values to the correct role → Save → Generate the role profile → ask user to log off and log back in → retest.</div></div>
+      </div>
+      <div class="box warn"><strong>Important:</strong> Never add authorization objects directly to the user profile (SU01). Always add to a role first, then assign the role to the user. Direct profile assignment is a security violation.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge sc">Sc2</span>
+    <span class="q-text">User cannot see the tile at all on the launchpad. What will you check?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag amber">Step-by-Step Approach</span>
+    <div class="ans-body">
+      <div class="steps">
+        <div class="step-row"><div class="step-circle">1</div><div class="step-body">Check if the correct <strong>Catalog</strong> is assigned in the user's PFCG frontend role. Go to PFCG → Menu tab → verify catalog is there and role is generated (green traffic light).</div></div>
+        <div class="step-row"><div class="step-circle">2</div><div class="step-body">For S/4HANA systems — verify <strong>Space and Page</strong> assignment is done correctly in the role. The tile must be in a Page that's inside an assigned Space.</div></div>
+        <div class="step-row"><div class="step-circle">3</div><div class="step-body">Check if the user's role is properly <strong>generated</strong> in PFCG. If the authorization data (traffic light) shows yellow or red, regenerate the profile and re-assign.</div></div>
+        <div class="step-row"><div class="step-circle">4</div><div class="step-body">Run <code>/UI2/INVALIDATE_CLIENT_CACHES</code> to clear the server-side launchpad cache. Then run <code>/UI2/CHIP_SYNCHRONIZE_CACHE</code> as well.</div></div>
+        <div class="step-row"><div class="step-circle">5</div><div class="step-body">Ask user to clear their browser cache (Ctrl+Shift+Del), close browser completely, and log into Fiori fresh. Browser cache often holds old launchpad state.</div></div>
+      </div>
+      <div class="box info">Tile not visible = catalog issue in 90% of cases. Always start with the catalog assignment check in PFCG before investigating anything else.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge sc">Sc3</span>
+    <span class="q-text">App shows "Failed to load metadata" error after clicking a tile. How do you fix it?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag amber">Step-by-Step Approach</span>
+    <div class="ans-body">
+      <p style="margin-bottom:8px">This error means the app cannot load the OData metadata document — the blueprint it needs to understand the service structure.</p>
+      <div class="checklist">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Go to <code>/IWFND/MAINT_SERVICE</code> → check if the OData service is activated (green status)</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Test the OData service using <code>/IWFND/GW_CLIENT</code> — call the $metadata endpoint and see if it returns data or an error</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Verify the SICF node for the app is active — go to <code>SICF</code> and check sap/bc/ui5_ui5 path for the specific app</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Check <code>/IWFND/ERROR_LOG</code> for Gateway-side errors — look for the specific service name and read the error detail</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Check <code>/IWBEP/ERROR_LOG</code> for backend OData model errors — sometimes the backend data provider has a bug or missing config</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Open browser Developer Tools → Network tab → reproduce the error → look for the failed HTTP request and read the server response body</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge sc">Sc4</span>
+    <span class="q-text">HTTP error codes in Fiori — what does each one mean and where do you look?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag amber">Answer</span>
+    <div class="ans-body">
+      <div class="http-grid">
+        <div class="http-card err"><div class="http-code">403</div><div class="http-txt"><strong>Forbidden</strong> — Authorization failure. User is authenticated but lacks permission. Check: SU53 → STAUTHTRACE → backend role auth objects → OData service authorization.</div></div>
+        <div class="http-card warn"><div class="http-code">404</div><div class="http-txt"><strong>Not Found</strong> — Service or URL does not exist or is not activated. Check: SICF node status → /IWFND/MAINT_SERVICE → verify the app URL path is correct.</div></div>
+        <div class="http-card err" style="background:#fff5f5;border-color:#feb2b2"><div class="http-code">500</div><div class="http-txt"><strong>Internal Server Error</strong> — Backend program crashed or threw an exception. Check: SM21 system log → /IWBEP/ERROR_LOG → contact ABAP developer if it's a code error.</div></div>
+        <div class="http-card purple"><div class="http-code">Nav</div><div class="http-txt"><strong>Cannot resolve navigation target</strong> — Semantic Object or Action mismatch. Check: Target Mapping in /UI2/FLPD_CUST → verify the Semantic Object + Action combination is correctly defined.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SECTION 5: ADVANCED -->
+<div id="s5" class="section">
+<div class="section-head">Advanced Topics (3+ Years Experience)</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge adv">A1</span>
+    <span class="q-text">Explain the complete end-to-end flow when a user clicks a Fiori Tile</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag" style="background:var(--purple-light);color:var(--purple)">Complete Flow</span>
+    <div class="ans-body">
+      <div class="steps">
+        <div class="step-row"><div class="step-circle">1</div><div class="step-body">User opens browser and logs into <strong>Fiori Launchpad (FLP)</strong> with their credentials</div></div>
+        <div class="step-row"><div class="step-circle">2</div><div class="step-body">Launchpad checks <strong>Catalog authorization</strong> in the user's frontend role → only tiles from assigned catalogs are rendered on the homepage</div></div>
+        <div class="step-row"><div class="step-circle">3</div><div class="step-body">User clicks a tile → Launchpad reads the <strong>Target Mapping</strong> associated with that tile</div></div>
+        <div class="step-row"><div class="step-circle">4</div><div class="step-body">Target Mapping resolves the <strong>Semantic Object + Action</strong> into an intent URL (e.g. #PurchaseOrder-display)</div></div>
+        <div class="step-row"><div class="step-circle">5</div><div class="step-body">The Fiori app component is loaded → it makes an <strong>OData service call</strong> through the SAP Gateway</div></div>
+        <div class="step-row"><div class="step-circle">6</div><div class="step-body">SAP Gateway validates the request and <strong>forwards it to the Backend server</strong></div></div>
+        <div class="step-row"><div class="step-circle">7</div><div class="step-body">Backend runs <strong>AUTHORITY-CHECK</strong> statements → checks auth objects for the user's backend role</div></div>
+        <div class="step-row"><div class="step-circle">8</div><div class="step-body">If authorized, data is <strong>fetched from backend tables</strong> and returned via OData response</div></div>
+        <div class="step-row"><div class="step-circle">9</div><div class="step-body">App renders the data in the browser → user sees the <strong>application fully loaded</strong></div></div>
+      </div>
+      <div class="box ok">This 9-step flow is the most commonly asked advanced question in Fiori Security interviews. Know every step and be ready to explain where each error type (403, 404, metadata) fits in this flow.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge adv">A2</span>
+    <span class="q-text">Difference between Business Catalog and Technical Catalog</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag" style="background:var(--purple-light);color:var(--purple)">Answer</span>
+    <div class="ans-body">
+      <div class="cmp">
+        <div class="cmp-col blue">
+          <h4>Business Catalog</h4>
+          <ul>
+            <li>Assigned directly to PFCG roles</li>
+            <li>Contains tiles visible to end users</li>
+            <li>Business-user facing</li>
+            <li>Aggregates tiles from technical catalogs</li>
+            <li>Naming: SAP_xxx or Z_BUSINESS_xxx</li>
+          </ul>
+        </div>
+        <div class="cmp-col green">
+          <h4>Technical Catalog</h4>
+          <ul>
+            <li>NOT assigned to roles directly</li>
+            <li>Source/library of tiles and target mappings</li>
+            <li>Admin/developer facing</li>
+            <li>Contains raw target mappings</li>
+            <li>Naming: SAP_TECH_xxx or Z_TECH_xxx</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box info">Think of it like this: Technical Catalog = the full library of books. Business Catalog = the curated reading list selected for a specific role or team, pointing to books in that library.</div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge adv">A3</span>
+    <span class="q-text">What is Intent-Based Navigation (IBN) in Fiori?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag" style="background:var(--purple-light);color:var(--purple)">Answer</span>
+    <div class="ans-body">
+      <p><strong>Intent-Based Navigation (IBN)</strong> is Fiori's standard way for apps to navigate to each other using a generic URL pattern instead of hardcoded application IDs.</p>
+      <div class="code-box" style="margin:8px 0">
+        <span>URL Pattern:</span>  #SemanticObject-action?param=value<br><br>
+        <span>Example 1:</span>    <em>#PurchaseOrder-display</em><br>
+        <span>Example 2:</span>    <em>#SalesOrder-manage?SalesOrder=5000001</em><br>
+        <span>Example 3:</span>    <em>#Employee-overview?pernr=12345</em>
+      </div>
+      <div class="checklist">
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Apps don't hardcode links to each other — they just declare an "intent" and the Launchpad resolves which app handles it</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">Gateway resolves the intent via Target Mapping → determines which app UI component to load</div></div>
+        <div class="check-row"><div class="check-icon blue"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-txt">This makes all Fiori apps loosely coupled, reusable, and easy to replace without breaking navigation</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qa-card" onclick="toggle(this)">
+  <div class="qa-q">
+    <span class="q-badge adv">A4</span>
+    <span class="q-text">How do you secure custom Fiori applications?</span>
+    <svg class="q-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qa-a">
+    <span class="ans-tag" style="background:var(--purple-light);color:var(--purple)">Answer</span>
+    <div class="ans-body">
+      <div class="steps">
+        <div class="step-row"><div class="step-circle">1</div><div class="step-body">Create a custom <strong>authorization object</strong> in <code>SU21</code> with the required authorization fields (activity, org levels, etc.)</div></div>
+        <div class="step-row"><div class="step-circle">2</div><div class="step-body">Add the <code>AUTHORITY-CHECK</code> statement in the backend ABAP code (OData data provider class) to enforce the check at runtime</div></div>
+        <div class="step-row"><div class="step-circle">3</div><div class="step-body">Create a <strong>custom catalog</strong> in <code>/UI2/FLPD_CUST</code> → add a new tile and configure the target mapping with correct Semantic Object + Action</div></div>
+        <div class="step-row"><div class="step-circle">4</div><div class="step-body">Register the custom OData service in <code>/IWFND/MAINT_SERVICE</code> so the Gateway knows about it</div></div>
+        <div class="step-row"><div class="step-circle">5</div><div class="step-body">Activate the SICF node for the custom app under <code>SICF</code> → sap/bc/ui5_ui5 path</div></div>
+        <div class="step-row"><div class="step-circle">6</div><div class="step-body">Create a PFCG frontend role with catalog + Space/Page, and a backend role with the custom auth object → assign both roles to users</div></div>
+      </div>
+      <div class="box danger"><strong>Never skip the backend authorization check!</strong> Frontend-only security can be bypassed by directly calling the OData service URL. Always enforce security at the backend layer.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- end .page -->
+
+<script>
+function toggle(card){card.classList.toggle('open')}
+function switchTab(i){
+  document.querySelectorAll('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
+  document.querySelectorAll('.section').forEach((s,j)=>s.classList.toggle('active',i===j));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
+
