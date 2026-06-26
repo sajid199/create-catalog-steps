@@ -641,7 +641,145 @@ footer {
         text-align: center;
     }
 }   
-/* ===== SCROLL ANIMATION ===== */
+/* ===== COMPARISON TABLE ===== */
+.comp-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.comp-section-header {
+  padding: 12px 18px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--purple);
+  font-family: 'IBM Plex Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.comp-intro {
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.75;
+  border-bottom: 1px solid var(--border2);
+}
+.comp-intro strong { color: var(--blue); }
+.comp-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 620px;
+}
+.comp-table thead th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+.comp-table thead th:first-child { color: var(--muted); }
+.comp-table thead th:nth-child(2) { color: #f59e0b; background: rgba(245,158,11,.06); }
+.comp-table thead th:nth-child(3) { color: #06b6d4; background: rgba(6,182,212,.06); }
+.comp-table thead th:nth-child(4) { color: #22c55e; background: rgba(34,197,94,.06); }
+.comp-table tbody tr {
+  border-bottom: 1px solid var(--border2);
+  transition: background .15s;
+}
+.comp-table tbody tr:last-child { border-bottom: none; }
+.comp-table tbody tr:hover { background: rgba(15,23,42,.03); }
+.comp-table td {
+  padding: 9px 14px;
+  vertical-align: top;
+  line-height: 1.55;
+  color: var(--text);
+}
+.comp-table td:first-child {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.comp-table td:nth-child(2) { background: rgba(245,158,11,.03); }
+.comp-table td:nth-child(3) { background: rgba(6,182,212,.03); }
+.comp-table td:nth-child(4) { background: rgba(34,197,94,.03); }
+.badge-yes { color: #16a34a; font-weight: 700; }
+.badge-no  { color: #dc2626; font-weight: 700; }
+.badge-lim { color: #d97706; font-weight: 700; }
+.comp-tc { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--cyan); }
+
+/* ===== METHODS COMPARISON CARD ===== */
+.method-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 18px;
+}
+@media(max-width:560px){ .method-grid { grid-template-columns: 1fr; } }
+.method-card {
+  border: 1px solid var(--border2);
+  border-radius: var(--rs);
+  padding: 14px;
+  background: var(--surface2);
+}
+.method-card.designer { border-left: 3px solid var(--blue); }
+.method-card.content-mgr { border-left: 3px solid #a78bfa; }
+.method-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 4px;
+}
+.method-badge.designer { color: var(--blue); }
+.method-badge.content-mgr { color: #a78bfa; }
+.method-tcode {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.method-list { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.method-list li { list-style: none; padding: 1px 0; }
+.method-list li::before { content: '▸ '; color: var(--dim); }
+
+/* ===== DIVIDER LABEL ===== */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted);
+}
+.section-divider::before, .section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border2);
+}
+
 .step-card {
   opacity: 0;
   transform: translateY(20px);
@@ -680,11 +818,12 @@ footer {
     </a>
 </div>
   <h1>SAP <em>Fiori Catalog</em><br>Creation – Notes</h1>
-  <p>Step-by-step guide with screenshots for interview preparation</p>
+  <p>Step-by-step guide: Designer &amp; Content Manager methods, with App Type comparison</p>
   <div class="header-stats">
-    <div class="stat"><strong>13</strong>&nbsp;Steps</div>
+    <div class="stat"><strong>16</strong>&nbsp;Steps</div>
     <div class="stat"><strong>32</strong>&nbsp;Screenshots</div>
-    <div class="stat"><strong>5</strong>&nbsp;T-Codes</div>
+    <div class="stat"><strong>6</strong>&nbsp;T-Codes</div>
+    <div class="stat"><strong>2</strong>&nbsp;Methods</div>
   </div>
 </header>
 
@@ -696,12 +835,83 @@ footer {
 <!-- MAIN -->
 <main class="container">
 
+  <!-- ===== APP TYPE COMPARISON TABLE ===== -->
+  <div class="comp-section">
+    <div class="comp-section-header">🖥️ SAP Application Types — Comparison</div>
+    <div class="comp-intro">
+      SAP has three generations of application interfaces. Understanding the differences is <strong>essential in interviews</strong> — you must know why Fiori exists, what it replaced, and how authorization differs across each type. The shift from SAP GUI → Web Dynpro → SAPUI5/Fiori represents SAP's evolution from desktop-only to mobile-first, OData-driven applications.
+    </div>
+    <div class="comp-table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>⚙️ SAP GUI Application</th>
+            <th>🌐 Web Dynpro Application</th>
+            <th>📱 SAP UI5 (Fiori) Application</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Interface</td><td>Desktop GUI (Dynpro Screens)</td><td>Browser-based</td><td>Browser-based, Responsive</td></tr>
+          <tr><td>Technology</td><td>SAP GUI / Dynpro ABAP</td><td>Web Dynpro ABAP / Java</td><td class="comp-tc">HTML5, CSS3, JavaScript, SAPUI5</td></tr>
+          <tr><td>Runs On</td><td>SAP GUI Client (installed)</td><td>Web Browser</td><td>Web Browser, Mobile, Tablet</td></tr>
+          <tr><td>Responsive / Mobile</td><td class="badge-no">❌ No</td><td class="badge-lim">⚠️ Limited</td><td class="badge-yes">✅ Excellent</td></tr>
+          <tr><td>Look &amp; Feel</td><td>Traditional SAP Screens</td><td>Modern Web Pages</td><td>SAP Fiori Design (clean, intuitive)</td></tr>
+          <tr><td>Development Tool</td><td>Screen Painter, Module Pool</td><td>Web Dynpro ABAP / Java IDE</td><td>SAPUI5 Framework + Business App Studio</td></tr>
+          <tr><td>Launch Method</td><td>SAP Logon → T-Code</td><td>Direct URL in browser</td><td>Fiori Launchpad → Tile click</td></tr>
+          <tr><td>OData / REST Service</td><td class="badge-no">❌ Not used</td><td class="badge-no">❌ Not used</td><td class="badge-yes">✅ Required (SAP Gateway)</td></tr>
+          <tr><td>Backend Communication</td><td>Direct ABAP / Dynpro calls</td><td>Web Dynpro Framework</td><td>OData (REST) services via Gateway</td></tr>
+          <tr><td>Authorization Objects</td><td>T-code (S_TCODE) + object-level</td><td>Web Dynpro auth + object-level</td><td>S_SERVICE (OData) + object-level via SU24</td></tr>
+          <tr><td>Backend System</td><td>ECC, S/4HANA</td><td>ECC, S/4HANA</td><td>ECC, S/4HANA (via Gateway)</td></tr>
+          <tr><td>Typical Examples</td><td class="comp-tc">SU01, PFCG, SUIM, SM59, SE10</td><td class="comp-tc">Classic GRC (ARM, EAM via WebUI), HR Self-Service</td><td class="comp-tc">My Inbox, Approve POs, Manage Users, Display Journal Entries</td></tr>
+          <tr><td>Security Role Setup</td><td>PFCG → Transactions tab → Add T-Codes</td><td>PFCG → Auth Default tab → Add WebDynpro Service</td><td>PFCG → Fiori tab (Space) + Auth Default (IWSG, IWSV)</td></tr>
+          <tr><td>Catalog / Tile needed?</td><td class="badge-no">❌ No — runs via T-Code directly</td><td class="badge-lim">⚠️ Optional — URL-based launch</td><td class="badge-yes">✅ Yes — Catalog + Target Mapping required</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="comp-intro" style="border-bottom:none;border-top:1px solid var(--border2);background:#eff6ff;">
+      💡 <strong>Interview insight:</strong> "Fiori apps require TWO extra layers that SAP GUI never needed — a Catalog/Tile (so the user can see the app on the Launchpad) and OData services registered in the role (S_SERVICE auth object). Missing either one causes the tile to not appear, or the app to throw an authorization error after clicking."
+    </div>
+  </div>
+
+  <!-- ===== TWO METHODS OVERVIEW ===== -->
+  <div class="comp-section">
+    <div class="comp-section-header">🔀 Two Ways to Create a Catalog &amp; Tile/Target Mapping</div>
+    <div class="method-grid">
+      <div class="method-card designer">
+        <div class="method-badge designer">Method A — Designer</div>
+        <div class="method-tcode">/UI2/FLPD_CUST</div>
+        <ul class="method-list">
+          <li>Visual drag-and-drop interface</li>
+          <li>Create catalog, drag SAP business catalog as reference tile</li>
+          <li>Target Mapping added inside the catalog editor</li>
+          <li>Best for first-time setup with visual feedback</li>
+          <li>Must assign transport request in Settings first</li>
+        </ul>
+      </div>
+      <div class="method-card content-mgr">
+        <div class="method-badge content-mgr">Method B — Content Manager</div>
+        <div class="method-tcode">/UI2/FLPCM_CUST</div>
+        <ul class="method-list">
+          <li>SAP GUI table-based interface (3 tabs: Catalogs, Tiles/TM, Roles)</li>
+          <li>Create catalog via "Create" button in Catalogs tab</li>
+          <li>Add Tiles/TM via "Add Tiles/Target Mappings" button</li>
+          <li>Shows content count (e.g. "Finance GL Report (3)")</li>
+          <li>Good for bulk management &amp; transport assignment</li>
+        </ul>
+      </div>
+    </div>
+    <div class="comp-intro" style="border-bottom:none;border-top:1px solid var(--border2);">
+      Both methods achieve the same result. In production SAP projects, <strong>/UI2/FLPCM_CUST</strong> is often used for day-to-day catalog maintenance because it provides a clearer overview of catalog contents and makes transport assignment straightforward. The Designer (/UI2/FLPD_CUST) is preferred for initial setup when you want to visually browse and configure tiles.
+    </div>
+  </div>
+
   <!-- QUICK REFERENCE -->
   <div class="qref">
     <div class="qref-header">⚡ Quick Reference</div>
     <div class="qref-grid">
       <div class="qref-item"><div class="qi-label">Launchpad Designer</div><div class="qi-value">/UI2/FLPD_CUST</div></div>
-      <div class="qref-item"><div class="qi-label">Transport Assign</div><div class="qi-value">/UI2/FLPCM_CUST</div></div>
+      <div class="qref-item"><div class="qi-label">Content Manager</div><div class="qi-value">/UI2/FLPCM_CUST</div></div>
       <div class="qref-item"><div class="qi-label">Space &amp; Page Mgmt</div><div class="qi-value">/UI2/FLP</div></div>
       <div class="qref-item"><div class="qi-label">Role Maintenance</div><div class="qi-value">PFCG</div></div>
       <div class="qref-item"><div class="qi-label">Transport Request</div><div class="qi-value">SE10</div></div>
@@ -711,7 +921,7 @@ footer {
       <div class="qref-item"><div class="qi-label">Business Catalog</div><div class="qi-value">SAP_SD_BC_SALES_OVP_DISPL</div></div>
       <div class="qref-item"><div class="qi-label">Frontend OData Type</div><div class="qi-value">IWSG</div></div>
       <div class="qref-item"><div class="qi-label">Backend OData Type</div><div class="qi-value">IWSV</div></div>
-      <div class="qref-item"><div class="qi-label">App Name</div><div class="qi-value">My Sales Overview</div></div>
+      <div class="qref-item"><div class="qi-label">CM Tabs</div><div class="qi-value">Catalogs · Tiles/TM · Roles</div></div>
     </div>
   </div>
 
@@ -758,7 +968,10 @@ footer {
   </div>
 
   <!-- ===== STEP CARDS ===== -->
+  <div class="section-divider">Method A — Launchpad Designer (/UI2/FLPD_CUST)</div>
   <div id="stepsWrap"></div>
+  <div class="section-divider" id="contentMgrSection" style="margin-top:32px;">Method B — Content Manager (/UI2/FLPCM_CUST)</div>
+  <div id="stepsWrap2"></div>
 
 </main>
 
@@ -1006,6 +1219,92 @@ const STEPS = [
 ];
 
 /* =====================================================
+   CONTENT MANAGER STEPS — /UI2/FLPCM_CUST method
+   ===================================================== */
+const CM_STEPS = [
+  {
+    id: 14,
+    color: '#a78bfa',
+    tag: 'Content Manager',
+    icon: '📂',
+    title: 'What is /UI2/FLPCM_CUST — Launchpad Content Manager?',
+    blocks: [
+      { type: 'tcode', label: 'T-Code', code: '/UI2/FLPCM_CUST', desc: 'Launchpad Content Manager: Client-Specific (Customizing) — SAP GUI table-based catalog management' },
+      { type: 'text', text: 'The <strong>Launchpad Content Manager</strong> is an SAP GUI-based tool (not browser-based like the Designer) for creating and managing Fiori catalogs, tiles, and target mappings. It has <strong>three tabs</strong> across the top:' },
+      { type: 'fields', rows: [
+        { key: 'Tab 1 — Catalogs',        val: 'List, create, copy, delete, and transport catalogs. Shows Catalog ID, Title, Scope (Customizing/Standard), Status.' },
+        { key: 'Tab 2 — Tiles/Target Mappings', val: 'Shows all tiles and target mappings associated with the selected catalog. Use "Add Tiles/Target Mappings" to link apps.' },
+        { key: 'Tab 3 — Roles',           val: 'Shows which PFCG roles are using this catalog. Helps you quickly find which roles are impacted by a catalog change.' },
+      ]},
+      { type: 'tip', text: 'The image in your screenshot shows catalog <code style="font-family:monospace;color:var(--cyan)">Z_BC_RTR_GL_REPORTING</code> titled "Finance GL Report" with 3 tiles assigned — including Journal Entry Analyzer (WDA), Display Journal Entries (GUI/FB03), and Display Item Change Log - Customer (UI5). This is exactly what a production catalog looks like after setup.' },
+      { type: 'warn', text: 'Always create a Transport Request in SE10 before working in /UI2/FLPCM_CUST. The system will ask you to assign one when you create or modify any catalog.' }
+    ]
+  },
+  {
+    id: 15,
+    color: '#a78bfa',
+    tag: 'Content Manager',
+    icon: '🗂️',
+    title: 'Creating a Catalog via Content Manager',
+    blocks: [
+      { type: 'tcode', label: 'T-Code', code: '/UI2/FLPCM_CUST', desc: 'Open this T-Code in SAP GUI → Catalogs tab is active by default' },
+      { type: 'section', text: 'Step-by-Step: Create Catalog' },
+      { type: 'fields', rows: [
+        { key: 'Step 1 — Open',           val: 'Run /UI2/FLPCM_CUST in SAP GUI. The Catalogs tab opens by default.' },
+        { key: 'Step 2 — Search (optional)', val: 'In "Search Catalogs" box, type your planned Catalog ID (e.g. Z_BC_RTR_GL_REPORTING) and click Go to confirm it does not already exist.' },
+        { key: 'Step 3 — Click Create',   val: 'Click the "Create" button in the toolbar above the results list.' },
+        { key: 'Step 4 — Enter Catalog ID', val: 'Enter your Z/Y prefixed Catalog ID. Example: Z_BC_RTR_GL_REPORTING' },
+        { key: 'Step 5 — Enter Title',    val: 'Enter a meaningful title. Example: Finance GL Report' },
+        { key: 'Step 6 — Scope',          val: 'Leave as "Customizing" (client-specific). Do not choose Standard unless creating SAP standard content.' },
+        { key: 'Step 7 — Transport',      val: 'System will prompt for Transport Request. Enter your SE10 transport number (e.g. DEV#K123456).' },
+        { key: 'Step 8 — Save',           val: 'Press Enter/Save. The catalog appears in the list with Status "Original".' },
+      ]},
+      { type: 'tip', text: 'After creation, the catalog shows <strong>Status: Original</strong> and <strong>Scope: Customizing</strong>. Read-Only checkbox is unchecked — this means you (and your team in this client) can modify it. If you see Status "Reference" it means this catalog is referencing another catalog.' },
+      { type: 'warn', text: 'The "Copy" button in the toolbar lets you copy an existing catalog including all its tiles. Use this carefully — if you copy a standard SAP catalog it will also copy all its tiles which may need cleanup.' }
+    ]
+  },
+  {
+    id: 16,
+    color: '#06b6d4',
+    tag: 'Content Manager',
+    icon: '🎯',
+    title: 'Adding Tiles & Target Mappings via Content Manager',
+    blocks: [
+      { type: 'text', text: 'Once the catalog is created, it is empty. You now need to add Tiles and Target Mappings using the Content Manager\'s bottom panel — the <strong>"Content in Catalog"</strong> section.' },
+      { type: 'section', text: 'Step-by-Step: Add Tiles & Target Mappings' },
+      { type: 'fields', rows: [
+        { key: 'Step 1 — Select Catalog',       val: 'In the Catalogs tab, click your catalog to select/highlight it (e.g. Z_BC_RTR_GL_REPORTING).' },
+        { key: 'Step 2 — Bottom Panel',          val: 'The bottom half of the screen shows "Content in Catalog <ID> – <Title> (0)" — currently 0 tiles.' },
+        { key: 'Step 3 — Click Add Tiles/TM',    val: 'In the bottom panel toolbar, click "Add Tiles/Target Mappings ▼" dropdown button.' },
+        { key: 'Step 4 — Select Source Catalog', val: 'A dialog opens. Search for the SAP Business Catalog that contains the app. Example: SAP_SD_BC_SALES_OVP_DISPL for My Sales Overview.' },
+        { key: 'Step 5 — Select Tiles',          val: 'The dialog shows all tiles in the source catalog. Select the tile(s) you want (Tile + TM row means both tile and target mapping are included).' },
+        { key: 'Step 6 — Confirm',               val: 'Click OK/Add. The system creates a reference tile and target mapping in your catalog.' },
+        { key: 'Step 7 — Verify Count',          val: 'The bottom panel title updates: "Content in Catalog ... (3)" — confirming 3 items added.' },
+        { key: 'Step 8 — Transport',             val: 'If prompted for transport, enter your SE10 number.' },
+      ]},
+      { type: 'section', text: 'Understanding the Content Panel Columns' },
+      { type: 'fields', rows: [
+        { key: 'Stat (Status)',        val: 'Green circle = active/visible, Red/Orange = inactive or has issue' },
+        { key: 'T/TM',                val: '"Tile + TM" = both the tile (visual card) and Target Mapping (navigation) are present. If only "Tile" shows, the app has no navigation configured.' },
+        { key: 'T/TM Match',          val: '"Tile + TM" match means the tile and target mapping are correctly linked.' },
+        { key: 'Semantic Object',     val: 'The navigation object type, e.g. AccountingDocument, Customer. Links to Target Mapping.' },
+        { key: 'Action',              val: 'The action on the semantic object, e.g. analyzeGLLineItem, displayDocument.' },
+        { key: 'App Type',            val: 'WDA = Web Dynpro ABAP | GUI = SAP GUI transaction | UI5 = Fiori/SAPUI5 app' },
+        { key: 'Application Resource',val: 'The actual app ID or T-Code. E.g. FB03 (SAP GUI), fin.ar.inspect.itemschangelog (Fiori)' },
+      ]},
+      { type: 'tip', text: '<strong>App Type insight for interviews:</strong> When you see a catalog with mixed App Types (WDA + GUI + UI5), it means the catalog exposes multiple generations of SAP apps together on the Launchpad. This is common in hybrid ECC systems where some processes use Fiori but others still use old transactions. The GUI type apps launch via an embedded SAP GUI within the browser.' },
+      { type: 'section', text: 'Remove Tiles / Other Functions' },
+      { type: 'fields', rows: [
+        { key: 'Remove Tiles/TM',      val: 'Select tile in bottom panel → click "Remove Tiles/Target Mappings" button. This removes the reference, not the SAP original.' },
+        { key: 'Display Usages in Pages', val: 'Shows which Fiori Pages are using this tile — useful for impact analysis before removing.' },
+        { key: 'Other Functions',      val: 'Transport assignment, Show Catalog Content, Show Usage in Roles — additional management utilities.' },
+      ]},
+      { type: 'warn', text: 'Clicking "Show Catalog Content" (a button that appears grayed out in the toolbar when nothing is being edited) reveals all tiles in the selected catalog in a read-only view. If a tile shows a red status, the OData service behind it is inactive in /IWFND/MAINT_SERVICE — check service activation there.' }
+    ]
+  }
+];
+
+/* =====================================================
    LIGHTBOX
    ===================================================== */
 let allImages = []; // collect all img src in order
@@ -1130,15 +1429,15 @@ function buildBlock(block) {
 }
 
 /* =====================================================
-   BUILD STEPS
+   BUILD STEPS — renders both STEPS and CM_STEPS
    ===================================================== */
-function buildSteps() {
+function buildStepSet(stepsArr, wrapId) {
   var nav = document.getElementById('stickyNav');
-  var wrap = document.getElementById('stepsWrap');
+  var wrap = document.getElementById(wrapId);
 
-  STEPS.forEach(function(step, idx) {
+  stepsArr.forEach(function(step, idx) {
     // Nav dot
-    if (idx > 0) {
+    if (nav.children.length > 0) {
       var sep = document.createElement('div');
       sep.className = 'nav-sep';
       nav.appendChild(sep);
@@ -1159,10 +1458,8 @@ function buildSteps() {
     card.className = 'step-card';
     card.id = 'step-' + step.id;
 
-    // Color hex with alpha for bg
     var colorBg = step.color + '18';
 
-    // Header
     var head = document.createElement('div');
     head.className = 'step-head';
     head.innerHTML =
@@ -1174,7 +1471,6 @@ function buildSteps() {
       + '<div class="step-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>';
     head.onclick = function() { card.classList.toggle('open'); };
 
-    // Body
     var body = document.createElement('div');
     body.className = 'step-body';
     step.blocks.forEach(function(block) {
@@ -1186,9 +1482,13 @@ function buildSteps() {
     card.appendChild(body);
     wrap.appendChild(card);
 
-    // Open first step by default
     if (idx === 0) card.classList.add('open');
   });
+}
+
+function buildSteps() {
+  buildStepSet(STEPS, 'stepsWrap');
+  buildStepSet(CM_STEPS, 'stepsWrap2');
 }
 
 /* =====================================================
